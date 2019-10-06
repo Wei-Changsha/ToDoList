@@ -90,5 +90,12 @@
 
     </LinearLayout>
 
+    <!--<Button-->
+        <!--android:id="@+id/create_database"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="创建数据库"-->
+        <!--/>-->
+
 
 </LinearLayout>

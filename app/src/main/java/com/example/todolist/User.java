@@ -1,17 +1,13 @@
-package com.example.todolist.db;
+package com.example.todolist;
 
 import org.litepal.crud.DataSupport;
 
+//数据表
 public class User extends DataSupport {
     private int id;
     private String account;
     private String password;
-    private boolean isRemember;
 
-    public User(String _account,String _password){
-        this.account=_account;
-        this.password=_password;
-    }
     public User(){}
 
     public int getId() {
@@ -38,11 +34,4 @@ public class User extends DataSupport {
         this.password = password;
     }
 
-    public boolean isRemember() {
-        return isRemember;
-    }
-
-    public void setRemember(boolean remember) {
-        isRemember = remember;
-    }
 }

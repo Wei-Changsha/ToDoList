@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.UserManager;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,8 +12,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.example.todolist.db.User;
 
 import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
@@ -26,7 +23,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEdit;
     private Button loginBtn;
     private Button registerBtn;
-    private Button button;
 
     //记住密码
     private SharedPreferences pref;
@@ -40,72 +36,40 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         pref= PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isRemember=pref.getBoolean("remember_password",false);
+
         rememberPass=findViewById(R.id.remeber_pass);
         accountEdit=findViewById(R.id.account);
         passwordEdit=findViewById(R.id.password);
 
         rememberOrNot();//是否记住密码
 
-//        boolean isRemember=pref.getBoolean("remember_password",false);
-//        String account=pref.getString("account","");
-//        String password=pref.getString("password","");
-//        if (!account.equals("")&&!password.equals("")){
-//            if (isRemember){//记住密码    将账户和密码复制到文本框
-//                accountEdit.setText(account);
-//                passwordEdit.setText(password);
-//                rememberPass.setChecked(true);
-//                User user=new User();
-//                user.setPassword(password);
-//                user.setAccount(account);
-//                user.setRemember(true);
-//                user.save();
-//            }
-//        }
-
 
         loginBtn=findViewById(R.id.login);
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String _account=accountEdit.getText().toString();
-                String _password=passwordEdit.getText().toString();
-                checkDataValid(_account,_password);//检查是否密码无效
+                String account=accountEdit.getText().toString();
+                String password=passwordEdit.getText().toString();
+                checkDataValid(account,password);//检查是否密码是否为空
+                List<User> loginList=DataSupport.where("account=?",account).find(User.class);
+                if (loginList.isEmpty()){
+                    Toast.makeText(LoginActivity.this,"用户未注册",Toast.LENGTH_SHORT).show();
+                    return;
+                }else if(loginList.get(0).getPassword().equals(password)){
+                    //tiaozhuan
+                    Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_SHORT).show();
 
-                Toast.makeText(LoginActivity.this,"aaaa",Toast.LENGTH_SHORT).show();
-
-
-                List<User> users=DataSupport.findAll(User.class);
-
-                for (User user:users){
-                    if (_account.equals("wcs")&&_password.equals("123456")){
-                        Toast.makeText(LoginActivity.this,user.getAccount(),Toast.LENGTH_SHORT).show();
-                    //if (_account.equals(user.getAccount())&&_password.equals(user.getPassword())){
-                        //检查复选框是否被选中
-                        if (rememberPass.isChecked()){
-                            user.setPassword(_password);
-                            user.setAccount(_account);
-                            user.setRemember(true);
-                            user.setRemember(pref.getBoolean("remember_password",true));
-                            user.save();
-
-                        }else{
-                            user.setRemember(pref.getBoolean("remember_password",false));
-                        }
-
-                        //跳转到主界面,tip登录成功
-//                    Intent intent=new Intent(LoginActivity.this,MainActivity.class);
-//                    startActivity(intent);
-                        Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_SHORT).show();
-
-                    }else{
-                        Toast.makeText(LoginActivity.this,"密码错误",Toast.LENGTH_SHORT).show();
-                    }
-
+                    return;
+                }else{
+                    Toast.makeText(LoginActivity.this,"密码错误",Toast.LENGTH_SHORT).show();
+                    return;
                 }
-//                else{
-//                    Toast.makeText(LoginActivity.this,"登录失败，用户不存在",Toast.LENGTH_SHORT).show();
-//                }
+
+
+
+
 
             }
         });
@@ -114,27 +78,33 @@ public class LoginActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                rememberOrNot();//是否记住密码
-
-                User user=new User();
-                user.setAccount(accountEdit.getText().toString());//将文本编辑框转化成字符串
-                user.setPassword(passwordEdit.getText().toString());
-                if (accountEdit!=null&&passwordEdit!=null){
-                    user=new User();
-                    user.setPassword(passwordEdit.getText().toString());
-                    user.setAccount(accountEdit.getText().toString());
-                    user.setRemember(true);
-                    user.save();
-                    Toast.makeText(LoginActivity.this,"注册成功",Toast.LENGTH_SHORT).show();
+                String account=accountEdit.getText().toString();
+                String password=passwordEdit.getText().toString();
+                List<User> users=DataSupport.findAll(User.class);
+                for (User user:users){
+                    if (user.getAccount().equals(account)&&user.getPassword().equals(password)){
+                        Toast.makeText(LoginActivity.this,"该账户已被注册过，请重新注册",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
 
-                Toast.makeText(LoginActivity.this,user.getAccount(),Toast.LENGTH_SHORT).show();
-//                Intent intent=new Intent(LoginActivity.this,MainActivity.class);
-//                startActivity(intent);
+                User user_2=new User();
+                user_2.setAccount(account);
+                user_2.setPassword(password);
+                user_2.save();//使用save保存
+                for (User user:users){
+                    if (user.getAccount().equals(account)&&user.getPassword().equals(password)){
+                        Toast.makeText(LoginActivity.this,"该账户已被注册过，请重新注册",Toast.LENGTH_SHORT).show();
+                        return;
+                    }else{
+                        Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                        startActivity(intent);
+                    }
+                }
 
             }
-        });
+        }
+        );
 
     }
 
@@ -151,19 +121,11 @@ public class LoginActivity extends AppCompatActivity {
         String account=pref.getString("account","");
         String password=pref.getString("password","");
         if (!account.equals("")&&!password.equals("")){
-            if (isRemember){//记住密码    将账户和密码复制到文本框
+            if (isRemember){
+                //记住密码    将账户和密码复制到文本框
                 accountEdit.setText(account);
                 passwordEdit.setText(password);
                 rememberPass.setChecked(true);
-                // 查找本地数据库中是否已存在当前用户,不存在则新建用户并写入
-                User user = DataSupport.where("account=?",account).findFirst(User.class);
-                if (user==null){
-                    user=new User();
-                    user.setPassword(password);
-                    user.setAccount(account);
-                    user.setRemember(true);
-                    user.save();
-                }
             }
         }
     }
@@ -228,11 +190,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //User user= new User();
                 User user = DataSupport.where("account=?").findFirst(User.class);
-
                 if (user!=null){
                     user.setAccount(accountEdit.getText().toString());//将文本编辑框转化成字符串
                     user.setPassword(passwordEdit.getText().toString());
-                    //String password=passwordEdit.getText().toString();
+
                     //创建数据库
                     LitePal.getDatabase();
                     //跳转到主界面,tip登录成功
