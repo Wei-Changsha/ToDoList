@@ -8,19 +8,19 @@
     <item
         android:id="@+id/nav_todo"
         android:icon="@drawable/ic_todo"
-        android:title="历史计划"/>
-    <item
-        android:id="@+id/nav_undo"
-        android:icon="@drawable/ic_undo"
-        android:title="未完成"/>
-    <item
-        android:id="@+id/nav_done"
-        android:icon="@drawable/ic_done"
-        android:title="已完成"/>
-    <item
-        android:id="@+id/nav_alarm"
-        android:icon="@drawable/menu1"
-        android:title="闹钟"/>
+        android:title="todolist排序"/>
+    <!--<item-->
+        <!--android:id="@+id/nav_undo"-->
+        <!--android:icon="@drawable/ic_undo"-->
+        <!--android:title="未完成"/>-->
+    <!--<item-->
+        <!--android:id="@+id/nav_done"-->
+        <!--android:icon="@drawable/ic_done"-->
+        <!--android:title="已完成"/>-->
+    <!--<item-->
+        <!--android:id="@+id/nav_alarm"-->
+        <!--android:icon="@drawable/menu1"-->
+        <!--android:title="闹钟"/>-->
 
 </group>
 

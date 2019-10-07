@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/zzz"
     tools:context=".AddTodo">
 
     <LinearLayout
@@ -28,12 +29,6 @@
             android:text=""
             android:textSize="18sp"
             android:textColor="#000"/>
-        <!--<Button-->
-        <!--android:id="@+id/data_btn"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_weight="1"-->
-        <!--android:text="选择日期"/>-->
 
     </LinearLayout>
 
@@ -138,8 +133,7 @@
             android:scrollbarSize="50sp"
             android:textSize="25sp"
             android:spinnerMode="dropdown"
-            android:dropDownWidth="150sp"
-           >
+            android:dropDownWidth="150sp">
         </Spinner>
 
     </LinearLayout>
@@ -180,10 +174,6 @@
         android:layout_weight="1"
         ></LinearLayout>//空
 
-
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -192,7 +182,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="ToDo闹钟"
+            android:text="ToDo提醒"
             android:textSize="25sp"
             android:gravity="center_vertical"
             android:textAlignment="center"

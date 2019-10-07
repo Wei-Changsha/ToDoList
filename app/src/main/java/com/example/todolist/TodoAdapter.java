@@ -17,13 +17,7 @@ import java.util.List;
 
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
 
-   // private Context mContext;
     private List<ToDo> toDoList;
-
-//    public TodoAdapter(Context mContext, List<ToDo> toDoList){
-//        this.mContext = mContext;
-//        this.toDoList = toDoList;
-//    }
 
     public interface OnItemOnClickListener{
         void onItemOnClick(View view,int pos);
@@ -48,6 +42,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
         TextView todoLevel;
         TextView todoTime;
         TextView todoSaveTime;
+        TextView todoDetail;
 
         public ViewHolder(View view){
             super(view);
@@ -56,6 +51,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
             todoLevel=view.findViewById(R.id.todo_level);
             todoTime=view.findViewById(R.id.todo_time);
             todoSaveTime=view.findViewById(R.id.todo_save_name);
+            todoDetail=view.findViewById(R.id.todo_save_detail);
         }
 
     }
@@ -83,9 +79,8 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
         holder.todoLevel.setText(toDo.getTodoLevel());
         holder.todoTime.setText(toDo.getTodoTime());
         holder.todoSaveTime.setText(toDo.getTodoSaveTime());
+        holder.todoDetail.setText(toDo.getTodoDetail());
 
-//        ViewHolder viewHolder = (ViewHolder) holder;
-//        viewHolder.getTextView().setText(infos.get(position));
 
         if(mOnItemOnClickListener!=null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -9,7 +9,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -32,15 +31,13 @@ public class AddTodo extends AppCompatActivity implements Serializable {
     private String saveAlarmTime;//
     private String saveAlarmDate;
     private String date;//保存的日期
-//    private DatePicker datePicker;
-//    private TimePicker timePicker;
+
     private int year;
     private int month;
     private int day;
     private int hour;
     private int minute;
     private Calendar calendar=Calendar.getInstance();
-    private int a;
 
     Button button1;
     Button button;
@@ -145,14 +142,16 @@ public class AddTodo extends AppCompatActivity implements Serializable {
         year=calendar.get(Calendar.YEAR);
         month=calendar.get(Calendar.MONTH);
         day=calendar.get(Calendar.DAY_OF_MONTH);
+        hour=calendar.get(Calendar.HOUR_OF_DAY);
+        minute=calendar.get(Calendar.MINUTE);
         TextView textView=findViewById(R.id.data_text);
         textView.setText(year+" 年 "+month+" 月 "+day+" 日 ");
-        date=year+" 年 "+month+" 月 "+day+" 日 ";
+        date=month+"-"+day+"   "+hour+":"+minute;
     }
 
     //选择todo等级
     public void seletTodoLevel(){
-        final String[] level=new String[]{"⭐⭐⭐⭐⭐","⭐⭐⭐⭐","⭐⭐⭐","⭐⭐","⭐"};
+        final String[] level=new String[]{"等级五","等级四","等级三","等级二","等级一"};
         ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,level);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         Spinner spinner=super.findViewById(R.id.spinner_level);
@@ -165,16 +164,6 @@ public class AddTodo extends AppCompatActivity implements Serializable {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 //Toast.makeText(AddTodo.this, "你点击的是" + isTodo[i], Toast.LENGTH_SHORT).show();
                 saveLevel=level[i];
-//                if (saveLevel.equals("⭐⭐⭐⭐⭐"))
-//                    a=5;
-//                else if (saveLevel.equals("⭐⭐⭐⭐"))
-//                    a=4;
-//                else if (saveLevel.equals("⭐⭐⭐"))
-//                    a=3;
-//                else if (saveLevel.equals("⭐⭐"))
-//                    a=2;
-//                else if (saveLevel.equals("⭐"))
-//                    a=1;
             }
 
             @Override
@@ -223,6 +212,7 @@ public class AddTodo extends AppCompatActivity implements Serializable {
             todo.setTodoDate(saveAlarmDate);
             todo.setTodoTime(saveAlarmTime);
             todo.save();
+            finish();
         }else{
             Toast.makeText(AddTodo.this,"Todo的内容不能为空",Toast.LENGTH_SHORT).show();
         }

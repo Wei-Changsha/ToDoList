@@ -12,18 +12,21 @@ public class ToDo extends DataSupport implements Serializable {
     private String todoDetail;//todo的详情描述
     private String todoDate;//闹钟日期
     private String todoTime;//钟时间
-    private int id;
-
     private String isTodo;//是否已完成
+
+    private int id;
     private int todoID;//todo的imageID
 
-    public ToDo(String todoName,int todoID,String todoLevel,String todoTime,String todoSaveTime){
+    public ToDo(String todoName,int todoID,String todoLevel,String todoTime,String todoSaveTime,String todoDetail){
         this.todoName=todoName;
         this.todoID=todoID;
         this.todoLevel=todoLevel;
         this.todoTime=todoTime;
         this.todoSaveTime=todoSaveTime;
+        this.todoDetail=todoDetail;
     }
+
+
     public ToDo(){}
 
     public int getId() {

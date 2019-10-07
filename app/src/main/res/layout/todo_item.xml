@@ -9,10 +9,11 @@
     >
     <ImageView
         android:id="@+id/todo_image"
-        android:layout_width="wrap_content"
+        android:layout_width="0sp"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.5"/>
+        android:background="@drawable/todo2"
+        android:layout_weight="1.4"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -25,18 +26,19 @@
 
             <TextView
                 android:id="@+id/todo_name"
-                android:layout_width="match_parent"
+                android:layout_width="0sp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:paddingTop="5sp"
-                android:textSize="25sp" />
+                android:textColor="#000"
+                android:textSize="20sp" />
             <TextView
-                android:id="@+id/todo_save_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:id="@+id/todo_save_detail"
+                android:layout_width="0sp"
+                android:layout_height="match_parent"
                 android:paddingTop="5sp"
-                android:textSize="15sp"/>
+                android:layout_weight="1"
+                android:textColor="#000"
+                android:textSize="13sp"/>
 
         </LinearLayout>
 
@@ -49,15 +51,24 @@
                 android:id="@+id/todo_level"
                 android:layout_width="0sp"
                 android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/todo_save_name"
+                android:layout_width="0sp"
+                android:layout_height="match_parent"
+                android:paddingTop="5sp"
                 android:layout_weight="1"
-                android:textSize="20sp"/>
+                android:textColor="#000"
+                android:textSize="13sp"/>
+
             <TextView
                 android:id="@+id/todo_time"
                 android:layout_width="0sp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingTop="10sp"
-                android:paddingLeft="10sp"
+                android:layout_weight="1.8"
+                android:paddingTop="5sp"
+
                 android:textColor="#000"
                 android:textSize="13sp"/>
 

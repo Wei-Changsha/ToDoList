@@ -8,8 +8,7 @@ import android.widget.Toast;
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public  void onReceive(Context context, Intent intent){
-        Toast.makeText(context, "您设置的时间到了！",
+        Toast.makeText(context, "时间到了，您有todo未完成哦！",
                 Toast.LENGTH_SHORT).show();
-
     }
 }

@@ -9,30 +9,33 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
-import org.litepal.LitePal;
+
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-
-    int num;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private DrawerLayout mDrawerLayout;//滑动菜单
     private List<ToDo> toDoList=new ArrayList<>();//todo的数组
     private int toDoID;
+    static int num=0;
+
+
 
     TodoAdapter adapter=new TodoAdapter(toDoList);//将todolist数据传到适配器中
 
@@ -40,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
 //        //创建数据库
 //        Button createDataBtn;
@@ -62,25 +64,25 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.menu1);//设置菜单图标
         }
 
-        kickMenu();//滑动菜单的点击事件
-
         //悬浮按钮
         FloatingActionButton fab=findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //悬浮按钮点击事件  intent
-                num=0;
-                Toast.makeText(MainActivity.this,"添加todo时间",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this,"添加todo时间",Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(MainActivity.this,AddTodo.class);
                 startActivity(intent);
             }
         });
-
+        kickMenu();//滑动菜单的点击事件
 
         //初始化数据
-        initTodo(0);
-        RecyclerView recyclerView=findViewById(R.id.recycler_view);
+        initTodo();
+
+
+
+        final RecyclerView recyclerView=findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);//layoutManager指定recycler view的布局方式为LinearLayout
         recyclerView.setAdapter(adapter);
@@ -89,20 +91,21 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new TodoAdapter.OnItemOnClickListener() {
             @Override//短暂点击事件
             public void onItemOnClick(View view, int pos) {
-                Toast.makeText(MainActivity.this, "This is"+pos, Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(MainActivity.this,toDoID +" pos "+pos, Toast.LENGTH_SHORT).show();
             }
 
             @Override//长按点击事件
             public void onItemLongOnClick(View view, int pos) {
-                //Toast.makeText(MainActivity.this, "LongClick"+pos, Toast.LENGTH_SHORT).show();
-                toDoID=pos+1;//id和pos的值  一般是相同的
+//                TodoAdapter.ViewHolder viewHolder = null;
+//                adapter.onBindViewHolder(viewHolder,pos);
+//                viewHolder.getClass();
+                toDoID=pos+1+num;//id和pos的值  一般是相同的
+                Log.d("MainActivity","aaatoDoid  "+toDoID);
                 showPopMenu(view,pos);
+
             }
         });
-
     }
-
 
     //弹出menu
     public void showPopMenu(View view,final int pos){
@@ -114,6 +117,20 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 adapter.removeItem(pos);
                 DataSupport.deleteAll(ToDo.class, "id = ?", toDoID+"");
+                num=num+1;
+                Log.d("MainActivity","aaanum  "+num);
+                List<ToDo> toDos= DataSupport.where("id>?",String.valueOf(toDoID)).find(ToDo.class);
+                for (ToDo toDo:toDos){
+                   int  newID=toDo.getId()-1;
+                    Log.d("MainActivity","aaa改前  "+toDo.getId());
+
+                    toDo.setId(newID);
+                    toDo.updateAll("id=?",toDo.getId()+"");
+                    toDo.save();
+                    toDo.update(toDo.getId());
+                    Log.d("MainActivity","aaa改后  "+toDo.getId());
+                }
+
                 return false;
             }
         });
@@ -129,54 +146,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     //初始化todo事件的各项数据
-    private void initTodo(int i){
+    private void initTodo(){
         List<ToDo> toDos= DataSupport.findAll(ToDo.class);
         ToDo mtoDo;
 
-        switch (i){
-            case 0:{//
-                for (ToDo toDo:toDos){
-                    mtoDo=new ToDo(toDo.getTodoName(),R.drawable.ic_undo,toDo.getTodoLevel(),toDo.getTodoDate()+"  "+toDo.getTodoTime(),toDo.getTodoSaveTime());
-                    toDoList.add(mtoDo);
-                    Toast.makeText(this,"创建todo",Toast.LENGTH_SHORT).show();
-//                    if (toDo.getIsTodo().equals("已完成")&&(!toDo.getTodoName().equals(""))){
-//                        String time=toDo.getTodoDate()+"  "+toDo.getTodoTime();
-//                        mtoDo=new ToDo(toDo.getTodoName(),R.drawable.ic_done,toDo.getTodoLevel(),toDo.getTodoDate()+"  "+toDo.getTodoTime(),toDo.getTodoSaveTime());
-//                        toDoList.add(mtoDo);
-//                        Toast.makeText(this,"创建一个已完成todo",Toast.LENGTH_SHORT).show();
-//                    }else if (toDo.getIsTodo().equals("待完成")&&(!toDo.getTodoName().equals(""))){
-//                        mtoDo=new ToDo(toDo.getTodoName(),R.drawable.ic_undo,toDo.getTodoLevel(),toDo.getTodoDate()+"  "+toDo.getTodoTime(),toDo.getTodoSaveTime());
-//                        toDoList.add(mtoDo);
-//                        Toast.makeText(this,"创建一个待完成todo",Toast.LENGTH_SHORT).show();
-//                    }
-                }
-            }
-                break;
-            case 1:{
-                for (ToDo toDo:toDos){
-                    if (toDo.getTodoLevel().equals("⭐⭐⭐⭐⭐")){
-                        mtoDo=new ToDo(toDo.getTodoName(),R.drawable.ic_done,toDo.getTodoLevel(),toDo.getTodoDate()+"  "+toDo.getTodoTime(),toDo.getTodoSaveTime());
-                        toDoList.add(mtoDo);
-                    }else if (toDo.getTodoLevel().equals("⭐⭐⭐⭐")){
-                        mtoDo=new ToDo(toDo.getTodoName(),R.drawable.ic_done,toDo.getTodoLevel(),toDo.getTodoDate()+"  "+toDo.getTodoTime(),toDo.getTodoSaveTime());
-                        toDoList.add(mtoDo);
-                    }else if (toDo.getTodoLevel().equals("⭐⭐⭐")){
-                        mtoDo=new ToDo(toDo.getTodoName(),R.drawable.ic_done,toDo.getTodoLevel(),toDo.getTodoDate()+"  "+toDo.getTodoTime(),toDo.getTodoSaveTime());
-                        toDoList.add(mtoDo);
-                    }else if (toDo.getTodoLevel().equals("⭐⭐")){
-                        mtoDo=new ToDo(toDo.getTodoName(),R.drawable.ic_done,toDo.getTodoLevel(),toDo.getTodoDate()+"  "+toDo.getTodoTime(),toDo.getTodoSaveTime());
-                        toDoList.add(mtoDo);
-                    }else if (toDo.getTodoLevel().equals("⭐")){
-                        mtoDo=new ToDo(toDo.getTodoName(),R.drawable.ic_done,toDo.getTodoLevel(),toDo.getTodoDate()+"  "+toDo.getTodoTime(),toDo.getTodoSaveTime());
-                        toDoList.add(mtoDo);
-                    }
-                }
-            }
-                break;
-                default:
+        for (ToDo toDo:toDos){
+            mtoDo=new ToDo(toDo.getTodoName(),R.drawable.ic_undo,toDo.getTodoLevel(),toDo.getTodoDate()+"  "+toDo.getTodoTime(),toDo.getTodoSaveTime(),"详情："+toDo.getTodoDetail());
+            toDoList.add(mtoDo);
+            mtoDo.getTodoID();
+            Log.d("MainActivity","aaa初始化  "+toDo.getId());
         }
-
-
 
     }
 
@@ -203,21 +182,16 @@ public class MainActivity extends AppCompatActivity {
                 mDrawerLayout.closeDrawers();
                 switch(menuItem.getItemId()) {
                     case R.id.nav_person: {
-
                         Intent intent=new Intent(MainActivity.this,LoginActivity.class);
                         startActivity(intent);
                         break;
                     }
 
                     case R.id.nav_todo:{
-                        num=1;
-                        initTodo(1);
+                        Intent intent=new Intent(MainActivity.this,Sort.class);
+                        startActivity(intent);
                         break;
                     }
-                    case R.id.nav_undo:
-                        break;
-                    case R.id.nav_done:
-                        break;
                     default:
 
                 }
@@ -228,5 +202,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
 
+        }
+    }
 }

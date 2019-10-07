@@ -6,6 +6,7 @@
     android:id="@+id/draw_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/zzz"
     tools:context=".MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -25,7 +26,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#026456"
+            android:background="@drawable/sss"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -36,7 +37,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="16sp"
             android:src="@drawable/add_todo"
-            app:backgroundTint="#F56DE7CF" />
+            app:backgroundTint="#F5E9F0EE" />
 
 
         <!--<Button-->

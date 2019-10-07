@@ -17,16 +17,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="个人说明"
-        android:textColor="#fff"
+        android:text="记录每一天！"
+        android:textColor="#000"
         android:textSize="14sp"/>
     <TextView
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/statement"
-        android:text="账户名"
-        android:textColor="#fff"
-        android:textSize="14sp"/>
+        android:text="My todolist"
+        android:textColor="#000"
+        android:textSize="20sp"/>
 
 </RelativeLayout>
