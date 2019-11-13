@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <litepal>
     <dbname value="TodoList"></dbname>
-    <version value="4"></version>
+    <version value="6"></version>
 
     <list>
         <mapping class="com.example.todolist.User"></mapping>
         <mapping class="com.example.todolist.ToDo"></mapping>
+        <mapping class="com.example.todolist.TaskList"></mapping>
+
 
     </list>
 </litepal>
